@@ -40,11 +40,23 @@ pip install -r requirements.txt
 
 4. Create a `.env` file in the root directory with the following variables:
 ```bash
-DEBUG=True
 SECRET_KEY=your-secret-key-here
-ALLOWED_HOSTS=localhost,127.0.0.1
-TOKEN_EXPIRY=3600  # Email verification token expiry in seconds
+TOKEN_EXPIRY=3600
+EMAIL_HOST_USER="<your email here>"
+EMAIL_HOST_PASSWORD="<your password>"
 ```
+### Email Configuration
+
+This project uses Gmail SMTP for sending emails. If you encounter issues sending emails, ensure that:
+
+- **"Allow less secure apps"** is enabled in your Gmail account settings.  
+   - Go to [Google Account Settings](https://myaccount.google.com/), navigate to **Security** > **Less secure app access**, and turn it on.
+
+- If you have **Two-Factor Authentication (2FA)** enabled, create an **App Password**:
+   - Go to [Google Account Settings](https://myaccount.google.com/), navigate to **Security** > **App passwords**, and generate a password for your app.
+
+For more information, visit: [Google Support](https://support.google.com/accounts/answer/6010255).
+
 
 5. Run migrations:
 ```bash
