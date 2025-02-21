@@ -19,7 +19,6 @@ def send_verification_email(request: Request, user: User) -> str:
         token = signer.sign(user.pk)
         scheme = request.scheme
         host = request.get_host()
-        url = f"{scheme}://{host}/api/auth/verify_email/{token}"
 
         subject = "Verify your email"
         html_message = render_to_string("email/verify.html", {"url": url})
