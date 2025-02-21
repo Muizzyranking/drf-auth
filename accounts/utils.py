@@ -1,6 +1,7 @@
 from django.core.signing import TimestampSigner
 from django.template.loader import render_to_string
 from rest_framework.request import Request
+from rest_framework.views import Response, exception_handler
 
 from accounts.models import User
 
@@ -19,6 +20,7 @@ def send_verification_email(request: Request, user: User) -> str:
         token = signer.sign(user.pk)
         scheme = request.scheme
         host = request.get_host()
+        url = f"{scheme}://{host}/api/auth/confirm-email/{token}"
 
         subject = "Verify your email"
         html_message = render_to_string("email/verify.html", {"url": url})
@@ -26,3 +28,10 @@ def send_verification_email(request: Request, user: User) -> str:
         return token
     except Exception as e:
         raise e
+
+
+def custom_exception_handler(exc, context):
+    response = exception_handler(exc, context)
+    if response is None:
+        return Response({"message": "Not Found"}, status=404)
+    return response
