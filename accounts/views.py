@@ -54,8 +54,9 @@ def signup(request: Request) -> Response:
         user.is_active = False
         user.save()
         try:
-            user.delete()
+            send_verification_email(request, user)
         except Exception as e:
+            user.delete()
             return Response(
                 {
                     "message": f"failed to send verification email: {str(e)}",
@@ -140,7 +141,7 @@ def resend_verification_mail(request: Request) -> Response:
             status=status.HTTP_400_BAD_REQUEST,
         )
     try:
-        user: User = get_object_or_404(User, email=email)
+        user: User = User.objects.get(email=email)
         if user.is_active:
             return Response(
                 {"message": "Email is already verified."},
